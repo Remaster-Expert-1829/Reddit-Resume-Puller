@@ -5,6 +5,7 @@
 #from playwright_stealth import Stealth              even big dawg not working :crying emoji:
 #from seleniumbase import SB                         I am crying ngl
 from playwright.sync_api import sync_playwright
+import subprocess
 import time
 import html
 import json
@@ -13,6 +14,7 @@ import json
 five_years_ago=time.time()-(5*365*24*60*60)
 #using old.reddit.com as it is less strict in blocking requests compared to new reddit
 url= "https://old.reddit.com/r/developersindia/search.json?q=resume+OR+graduate&restrict_sr=on&limit=20&t=all"
+alt_url="https://old.reddit.com/r/btechtards/search.json?q=resume+OR+graduate&restrict_sr=on&limit=20&t=all"
 #random_version=random.randint(10000000,99999999)
 #random version used to avoid crashing as Reddit might block requests from same agent
 '''headers = {
@@ -30,8 +32,24 @@ url= "https://old.reddit.com/r/developersindia/search.json?q=resume+OR+graduate&
 }''' #No more needed as curl_cffi handles it itself
 #print("Fetching data from Reddit... might take some time\n")
 #response=requests.get(url,impersonate="chrome116")                      well tried but rip
+def launch_chrome():
+    print("Launching chrome with remote debugging enabled...")
+    chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"  # Update this path according to your Chrome installation
+    try:
+        subprocess.Popen([
+            chrome_path,
+            "--remote-debugging-port=9222", 
+            r"--user-data-dir=C:\ChromeDebug",
+            "--new-window"
+        ])
+        time.sleep(3)
+        print("Chrome launched successfully")
+    except FileNotFoundError:
+        print("Error:Could not find Chrome executable in the given path. Please check chrome is installed and update the chrome_path variable with the correct path to your Chrome installation.")
+        exit()
 def main():
-    print("Launching browser instance to fetch data...")
+    print("Reddit Resume Scraper by SonicX1829")
+    launch_chrome()
     #with Stealth().use_sync(sync_playwright()) as p:
     #with SB(uc=True,headless=False) as sb:
     with sync_playwright() as p:

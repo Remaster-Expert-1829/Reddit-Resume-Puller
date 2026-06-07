@@ -10,3 +10,6 @@ worthy additions:
 
 project documentation:
 wish to have complete installation, how to use, modify url to have different results, modify the code to user's specific use case sections in future once project is okayishingly complete
+
+failure story:
+document the entire try attempts, what worked and what didn't, explain everything thoroughly including reddit's new policies to block everyone trying to scrape their data
