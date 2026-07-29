@@ -34,6 +34,19 @@ alt_url="https://old.reddit.com/r/btechtards/search.json?q=resume+OR+graduate&re
 }''' #No more needed as curl_cffi handles it itself
 #print("Fetching data from Reddit... might take some time\n")
 #response=requests.get(url,impersonate="chrome116")                      well tried but rip
+
+def wait_for_port(port,timeout=30):
+    print(f"Waiting for port {port} to be open")
+    start_time=time.time()
+    while time.time()-start_time<timeout:
+        try:
+            with socket.create_connection(("localhost",port),timeout=1):
+                print(f"Port {port} is open")
+                return True
+        except (ConnectionRefusedError,TimeoutError,OSError):
+            time.sleep(1)
+    print("Timed out waiting for the port to be open")
+    return False
 def launch_chrome():
     print("Commander Cody, the time has come. Execute Order 66")
     subprocess.run(["taskkill","/F","/IM","chrome.exe","/T"],capture_output=True)
@@ -44,16 +57,20 @@ def launch_chrome():
     try:
         subprocess.Popen([
             chrome_path,
-            "--remote-debugging-port=9222", 
-            f"--user-data-dir={profile_path}",
-            #r"--user-data-dir=C:\ChromeDebug",
+            "--remote-debugging-port=9225",
+            "--remote-allow-origins=*",
+            #f"--user-data-dir={profile_path}",     removed to prevent chrome from blocking external script to open a debugging port for default profile since passing path to the default profile itself is kinda sussy
+            r"--user-data-dir=C:\ChromeDebug",
             "--new-window"
         ])
-        time.sleep(3)
+        #time.sleep(3)
+        if not wait_for_port(9225):
+            print("Chrome failed to open debugging port")
+            exit(1)
         print("Chrome launched successfully")
     except FileNotFoundError:
         print("Error:Could not find Chrome executable in the given path. Please check chrome is installed and update the chrome_path variable with the correct path to your Chrome installation.")
-        exit()
+        exit()     
 def main():
     print("Reddit Resume Scraper by SonicX1829")
     launch_chrome()
@@ -61,7 +78,7 @@ def main():
     #with SB(uc=True,headless=False) as sb:
     with sync_playwright() as p:
         try:
-            browser=p.chromium.connect_over_cdp("http://localhost:9222")
+            browser=p.chromium.connect_over_cdp("http://localhost:9225")
             #browser=p.chromium.launch(headless=False)
             #telling playwright to use a normal chrome user agent to avoid it explicitly announcing itself as a bot
             '''context=browser.new_context(
@@ -78,7 +95,7 @@ def main():
             
             print(f"Browser navigated to the page.")
             #delay incase Cloudflare has an invisible challenge to process, thus giving it some time to complete before trying to access the content
-            time.sleep(6)
+            time.sleep(3)
             raw_text=page.locator("body").inner_text()
             #raw_text=sb.get_text("body")
             if "You've been blocked by network security" in raw_text:
