@@ -4,11 +4,13 @@
 #from playwright.sync_api import sync_playwright     I am gonna cry broooo
 #from playwright_stealth import Stealth              even big dawg not working :crying emoji:
 #from seleniumbase import SB                         I am crying ngl
+import os
 from playwright.sync_api import sync_playwright
 import subprocess
 import time
 import html
 import json
+import socket
 #import random                              didnt work
 
 five_years_ago=time.time()-(5*365*24*60*60)
@@ -33,13 +35,18 @@ alt_url="https://old.reddit.com/r/btechtards/search.json?q=resume+OR+graduate&re
 #print("Fetching data from Reddit... might take some time\n")
 #response=requests.get(url,impersonate="chrome116")                      well tried but rip
 def launch_chrome():
+    print("Commander Cody, the time has come. Execute Order 66")
+    subprocess.run(["taskkill","/F","/IM","chrome.exe","/T"],capture_output=True)
+    time.sleep(2)
     print("Launching chrome with remote debugging enabled...")
     chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"  # Update this path according to your Chrome installation
+    profile_path=os.path.expandvars(r"%LOCALAPPDATA%\Google\Chrome\User Data")
     try:
         subprocess.Popen([
             chrome_path,
             "--remote-debugging-port=9222", 
-            r"--user-data-dir=C:\ChromeDebug",
+            f"--user-data-dir={profile_path}",
+            #r"--user-data-dir=C:\ChromeDebug",
             "--new-window"
         ])
         time.sleep(3)
@@ -61,7 +68,8 @@ def main():
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
             )'''
             default_context=browser.contexts[0]
-            page=default_context.pages[0]
+            #page=default_context.pages[0]
+            page=default_context.new_page()
             #page=browser.new_page()
             #page=context.new_page()
             #stealth_sync(page)
@@ -70,7 +78,7 @@ def main():
             
             print(f"Browser navigated to the page.")
             #delay incase Cloudflare has an invisible challenge to process, thus giving it some time to complete before trying to access the content
-            time.sleep(3)
+            time.sleep(6)
             raw_text=page.locator("body").inner_text()
             #raw_text=sb.get_text("body")
             if "You've been blocked by network security" in raw_text:
