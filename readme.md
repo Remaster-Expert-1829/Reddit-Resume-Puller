@@ -15,3 +15,5 @@ wish to have complete installation, how to use, modify url to have different res
 
 failure story:
 document the entire try attempts, what worked and what didn't, explain everything thoroughly including reddit's new policies to block everyone trying to scrape their data
+
+**Document everything 30/07/26**
