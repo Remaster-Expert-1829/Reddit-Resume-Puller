@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reddit Resume Review Showcase</title>
+    <meta name="description" content="A neat and interactive showcase of reddit resume posts.">
+    
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-elements">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+
+    <div class="app-container">
+        <header class="hero">
+            <h1>Reddit Resume Puller</h1>
+            <h2>Created by <a href="https://github.com/Remaster-Expert-1829" target="_blank" rel="noopener noreferrer">Yashdeep Singh</a></h2>
+            <p>Explore recent 125 around resumes for analyzing purposes.</p>
+            <p id="post-count" class="post-count"></p>
+            <div class="controls">
+                <label for="sort-select">Sort by:</label>
+                <select id="sort-select" class="sort-select">
+                    <option value="random">Random</option>
+                    <option value="most">Most Upvotes</option>
+                    <option value="least">Least Upvotes</option>
+                    <option value="most_comments">Most Comments</option>
+                    <option value="least_comments">Least Comments</option>
+                </select>
+            </div>
+        </header>
+
+        <main>
+            <div id="loader" class="loader">Loading resumes...</div>
+            <div id="posts-grid" class="posts-grid">
+                <!-- Posts will be injected here via JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Image Zoom Modal -->
+    <div id="image-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+        <div class="modal-content-container">
+            <img class="modal-image" id="zoomed-image" alt="Zoomed view">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

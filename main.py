@@ -81,6 +81,8 @@ def main():
                                 continue
                             title=post_data['title']
                             permalink=f"https://www.reddit.com{post_data['permalink']}"
+                            upvotes=post_data['ups']
+                            ncomments=post_data['num_comments']
                             #for storing all image urls from a post
                             image_urls = []
                             #getting image urls from a gallery post
@@ -104,6 +106,8 @@ def main():
                                     "subreddit": subreddit_name,
                                     "title": title,
                                     "link": permalink,
+                                    "upvotes":upvotes,
+                                    "comments":ncomments,
                                     "images": image_urls
                                 })
                         print(f"Found {valid_post_count} valid image posts within the last 5 years")
