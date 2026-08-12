@@ -4,7 +4,7 @@ code is working great now, we can fetch resumes successfully;
 
 worthy additions:
 1. add documentation
-2. modify url to go through a large number of posts preferably over 500 posts (requires pagination)
+2. modify url to go through a large number of posts preferably over 500 posts (requires pagination) + add more keywords for searching posts
 3. host the webpage publicly where the python script would be running and refreshing periodically and people can adjust number of posts, add/remove subreddits, adjust filters, etc
 
 project documentation:
