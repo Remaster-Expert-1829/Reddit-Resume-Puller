@@ -1,8 +1,8 @@
-# Reddit Resume Showcase
+# Reddit Resume Puller
 
 A modern, premium web application that pulls and displays developer resumes from various subreddits for review and feedback. Built with a sleek glassmorphism UI, this tool makes it easy to browse, sort, and analyze resumes with high-quality image zooming and panning features.
 
-## ✨ Features
+## Features
 
 - **Dynamic Resume Grid**: Beautiful glassmorphism cards displaying the resume title, subreddit origin, upvotes, and comments.
 - **Advanced Sorting**: Filter resumes by:
@@ -16,13 +16,13 @@ A modern, premium web application that pulls and displays developer resumes from
 - **One-Click Data Refresh**: Instantly trigger the Python scraper script directly from the website to pull the latest resumes, with seamless UI auto-reloading.
 - **Direct Reddit Integration**: Click on any resume title to instantly navigate to the original Reddit thread to read comments and roasts.
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Frontend**: Vanilla HTML5, CSS3 (Custom Grid, CSS Variables, Animations), and JavaScript (ES6+).
 - **Backend Options**: Includes both **Node.js (Express)** and **Python** backend implementations to handle data refreshing and static file serving.
 - **Data Source**: A local `data.json` file populated by the background Python script (`main.py`).
 
-## 🛠️ Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 - [Python 3.x](https://www.python.org/downloads/) (for the data pulling script)
@@ -77,7 +77,7 @@ If you are developing and want to use the **VS Code Live Server** extension for 
    ```
 3. The frontend is specifically configured with CORS to talk to port `8000`, so the "Refresh Data" button will still work perfectly even while using Live Server!
 
-## 📁 Project Structure
+## Project Structure
 
 - `index.html`: The main dashboard structure.
 - `style.css`: All styling, animations, and glassmorphism effects.
@@ -87,7 +87,7 @@ If you are developing and want to use the **VS Code Live Server** extension for 
 - `main.py`: The core script that pulls resume data from Reddit.
 - `data.json`: The database file where pulled resumes are stored.
 
-## ⚙️ Customizing the Reddit Queries
+## Customizing the Reddit Queries
 
 The core logic of which resumes are pulled lives at the very top of `main.py`. You can change these URLs to pull different posts, target different subreddits, or change the search terms.
 
