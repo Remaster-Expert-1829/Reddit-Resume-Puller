@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let allPosts = [];
 
     // Fetch data with cache busting to prevent stale data
-    fetch('data.json?v=' + new Date().getTime(), { cache: 'no-store' })
+    fetch('http://127.0.0.1:8000/data.json?v=' + new Date().getTime(), { cache: 'no-store' })
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
@@ -31,6 +31,52 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sortSelect) {
                 sortSelect.addEventListener('change', (e) => {
                     applySort(e.target.value);
+                });
+            }
+
+            // Refresh Data Button Logic
+            const refreshBtn = document.getElementById('refresh-btn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', async () => {
+                    refreshBtn.disabled = true;
+                    refreshBtn.classList.add('loading');
+                    refreshBtn.innerHTML = '<span class="refresh-icon">↻</span> Refreshing...';
+                    
+                    try {
+                        // Explicitly call the backend on port 8000, allowing this frontend to run on VS Code Live Server
+                        const res = await fetch('http://127.0.0.1:8000/api/refresh', { method: 'POST' });
+                        const result = await res.json();
+                        
+                        if (result.status === 'success') {
+                            // Re-fetch data.json
+                            const dataRes = await fetch('data.json?v=' + new Date().getTime(), { cache: 'no-store' });
+                            const newData = await dataRes.json();
+                            
+                            allPosts = newData;
+                            const postCountEl = document.getElementById('post-count');
+                            if (postCountEl) {
+                                postCountEl.textContent = `Showing ${newData.length} Resumes`;
+                            }
+                            
+                            const sortSelect = document.getElementById('sort-select');
+                            applySort(sortSelect ? sortSelect.value : 'random');
+                            
+                            refreshBtn.innerHTML = '<span class="refresh-icon">✓</span> Updated!';
+                        } else {
+                            alert('Error refreshing data: ' + result.message);
+                            refreshBtn.innerHTML = '<span class="refresh-icon">↻</span> Refresh Data';
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        alert('Server error. Make sure you are running server.py instead of http.server');
+                        refreshBtn.innerHTML = '<span class="refresh-icon">↻</span> Refresh Data';
+                    }
+                    
+                    setTimeout(() => {
+                        refreshBtn.disabled = false;
+                        refreshBtn.classList.remove('loading');
+                        refreshBtn.innerHTML = '<span class="refresh-icon">↻</span> Refresh Data';
+                    }, 3000);
                 });
             }
 

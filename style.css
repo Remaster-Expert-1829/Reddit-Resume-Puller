@@ -179,6 +179,46 @@ body {
     color: var(--text-primary);
 }
 
+.refresh-btn {
+    padding: 0.5rem 1rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.refresh-btn:hover {
+    background: #4f46e5;
+    transform: translateY(-2px);
+}
+
+.refresh-btn:disabled {
+    background: #6b7280;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.refresh-icon {
+    display: inline-block;
+    transition: transform 0.5s;
+}
+
+.refresh-btn.loading .refresh-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
 .tags-container {
     display: flex;
     gap: 0.5rem;

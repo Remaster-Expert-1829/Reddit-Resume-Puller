@@ -32,9 +32,8 @@ def launch_chrome():
     time.sleep(2)
     print("Launching chrome with remote debugging enabled...")
     chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"  # Update this path according to your Chrome installation
-    profile_path=os.path.expandvars(r"%LOCALAPPDATA%\Google\Chrome\User Data")
     try:
-        subprocess.Popen([
+        chrome_process=subprocess.Popen([
             chrome_path,
             "--remote-debugging-port=9225",
             "--remote-allow-origins=*",
@@ -45,12 +44,13 @@ def launch_chrome():
             print("Chrome failed to open debugging port")
             exit(1)
         print("Chrome launched successfully")
+        return chrome_process
     except FileNotFoundError:
         print("Error:Could not find Chrome executable in the given path. Please check chrome is installed and update the chrome_path variable with the correct path to your Chrome installation.")
         exit()     
 def main():
     print("Reddit Resume Scraper by SonicX1829")
-    launch_chrome()
+    browser_process=launch_chrome()
     #list for storing scraped data
     scraped_data=[]
     global_post_count=0
@@ -123,5 +123,8 @@ def main():
                 print("No valid posts found")
         except Exception as e:
             print(f"Failed to connect to Chrome: {e}")
+    #killing debug chrome instance
+    subprocess.run(["taskkill","/F","/PID",str(browser_process.pid),"/T"],capture_output=True)
+    print("Debug instance closed")
 if __name__ == "__main__":
     main()
