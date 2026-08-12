@@ -34,6 +34,12 @@ Before running the application, ensure the Python script can find your Google Ch
 2. Locate the `chrome_path` variable (around line 34).
 3. If your Chrome is installed in a different directory than the default (`C:\Program Files\Google\Chrome\Application\chrome.exe`), you **must** update this path manually for the scraper to work.
 
+### Installing Dependencies
+Before running anything, you need to install the required Python packages (such as Playwright). You can automatically install everything by running the included setup script in your terminal:
+```bash
+python requirements.py
+```
+
 ### Running the Application
 
 You have a few flexible ways to run this application. Because the "Refresh Data" button needs to execute a local Python script, you must run one of the included backends.

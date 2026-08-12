@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let allPosts = [];
 
     // Fetch data with cache busting to prevent stale data
-    fetch('http://127.0.0.1:8000/data.json?v=' + new Date().getTime(), { cache: 'no-store' })
+    fetch('data.json?v=' + new Date().getTime(), { cache: 'no-store' })
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
@@ -43,8 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     refreshBtn.innerHTML = '<span class="refresh-icon">↻</span> Refreshing...';
                     
                     try {
-                        // Explicitly call the backend on port 8000, allowing this frontend to run on VS Code Live Server
-                        const res = await fetch('http://127.0.0.1:8000/api/refresh', { method: 'POST' });
+                        // Dynamically grab the hostname (localhost or 127.0.0.1) but target port 8000 for the backend API
+                        const apiUrl = `http://${window.location.hostname}:8000/api/refresh`;
+                        const res = await fetch(apiUrl, { method: 'POST' });
                         const result = await res.json();
                         
                         if (result.status === 'success') {
@@ -59,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                             
                             const sortSelect = document.getElementById('sort-select');
-                            applySort(sortSelect ? sortSelect.value : 'random');
+                            applySort(sortSelect ? sortSelect.value : 'latest');
                             
                             refreshBtn.innerHTML = '<span class="refresh-icon">✓</span> Updated!';
                         } else {
@@ -80,12 +81,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            applySort('random');
+            applySort('latest');
         })
         .catch(error => {
             loader.textContent = 'Failed to load data. Make sure you are running a local server (e.g. Live Server).';
             console.error('Error fetching data:', error);
         });
+
+    function formatNumber(num) {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+        }
+        if (num >= 1000) {
+            return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+        }
+        return num;
+    }
 
     function applySort(sortType) {
         let sorted = [...allPosts];
@@ -102,6 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
             sorted.sort((a, b) => (b.comments || 0) - (a.comments || 0));
         } else if (sortType === 'least_comments') {
             sorted.sort((a, b) => (a.comments || 0) - (b.comments || 0));
+        } else if (sortType === 'latest') {
+            sorted.sort((a, b) => (b.created || 0) - (a.created || 0));
+        } else if (sortType === 'oldest') {
+            sorted.sort((a, b) => (a.created || 0) - (b.created || 0));
         }
         
         grid.innerHTML = '';
@@ -135,13 +150,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const upvotesTag = document.createElement('span');
             upvotesTag.className = 'upvotes-tag';
-            upvotesTag.innerHTML = `&#8679; ${post.upvotes || 0}`;
+            upvotesTag.innerHTML = `&#8679; ${formatNumber(post.upvotes || 0)}`;
             tagsContainer.appendChild(upvotesTag);
 
             const commentsTag = document.createElement('span');
             commentsTag.className = 'comments-tag';
-            commentsTag.innerHTML = `&#128172; ${post.comments || 0}`;
+            commentsTag.innerHTML = `&#128172; ${formatNumber(post.comments || 0)}`;
             tagsContainer.appendChild(commentsTag);
+
+            if (post.created) {
+                const dateTag = document.createElement('span');
+                dateTag.className = 'date-tag';
+                const dateObj = new Date(post.created * 1000);
+                dateTag.innerHTML = `&#128197; ${dateObj.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`;
+                tagsContainer.appendChild(dateTag);
+            }
 
             header.appendChild(tagsContainer);
 

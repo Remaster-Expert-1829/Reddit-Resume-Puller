@@ -249,6 +249,18 @@ body {
     gap: 0.3rem;
 }
 
+.date-tag {
+    background: rgba(167, 139, 250, 0.15);
+    color: #a78bfa;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
 /* Grid System */
 .posts-grid {
     display: grid;

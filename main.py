@@ -107,6 +107,7 @@ def main():
                                     "title": title,
                                     "link": permalink,
                                     "upvotes":upvotes,
+                                    "created":post_data['created_utc'],
                                     "comments":ncomments,
                                     "images": image_urls
                                 })
